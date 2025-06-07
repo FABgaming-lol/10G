@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>10-G Student Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Roboto&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #121212;
+      --text: #ffffff;
+      --accent: #00bfff;
+      --card: #1e1e1e;
+    }
+    [data-theme="light"] {
+      --bg: #ffffff;
+      --text: #000000;
+      --accent: #0077ff;
+      --card: #f0f0f0;
+    }
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      transition: background 0.3s, color 0.3s;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(circle at 25% 25%, #00bfff44, transparent 40%),
+                  radial-gradient(circle at 75% 75%, #00ffcc22, transparent 40%),
+                  radial-gradient(circle at 50% 50%, #0080ff33, transparent 50%);
+      animation: animateBackground 20s linear infinite;
+      z-index: -1;
+    }
+    @keyframes animateBackground {
+      0% { transform: translate(0, 0); }
+      50% { transform: translate(20px, -20px); }
+      100% { transform: translate(0, 0); }
+    }
+    header {
+      background: var(--bg);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--accent);
+    }
+    header h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2rem;
+      color: var(--accent);
+    }
+    nav a {
+      margin-left: 1.5rem;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #00ffcc;
+    }
+    main {
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+    section {
+      background-color: var(--card);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 0 16px rgba(0, 191, 255, 0.2);
+      transition: transform 0.3s ease;
+    }
+    section:hover {
+      transform: translateY(-5px);
+    }
+    section h2 {
+      color: var(--accent);
+      margin-top: 0;
+      font-size: 1.3rem;
+    }
+    iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+      border-radius: 12px;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: var(--bg);
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+    .theme-toggle {
+      cursor: pointer;
+      background: none;
+      border: 2px solid var(--accent);
+      border-radius: 8px;
+      color: var(--accent);
+      padding: 0.5rem 1rem;
+      font-weight: bold;
+      margin-left: 1rem;
+    }
+    .login-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+    .login-overlay input {
+      padding: 0.5rem;
+      margin: 0.5rem;
+      font-size: 1rem;
+    }
+    .login-overlay button {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      background-color: var(--accent);
+      border: none;
+      cursor: pointer;
+    }
+    .todo-input {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    .todo-input input {
+      flex: 1;
+      padding: 0.5rem;
+    }
+    .todo-input button {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+    }
+    .todo-list {
+      list-style: none;
+      padding: 0;
+      margin-top: 1rem;
+    }
+    .todo-list li {
+      background: #2a2a2a;
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .todo-list li button {
+      background: red;
+      border: none;
+      color: white;
+      padding: 0.25rem 0.5rem;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div id="login" class="login-overlay">
+    <h2>Welcome to 10-G!</h2>
+    <input id="username" placeholder="Enter your name" />
+    <button onclick="enterSite()">Enter</button>
+  </div>
+
+  <header>
+    <h1>10-G Hub</h1>
+    <nav>
+      <a href="#study">Study</a>
+      <a href="#chat">Chat</a>
+      <a href="#watch">Watch</a>
+      <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="study">
+      <h2>Study Together</h2>
+      <div class="todo-input">
+        <input id="taskInput" placeholder="Add a study task...">
+        <button onclick="addTask()">Add</button>
+      </div>
+      <ul id="taskList" class="todo-list"></ul>
+    </section>
+
+    <section id="chat">
+      <h2>Chat (Coming Soon)</h2>
+      <p>Group chat functionality will be added here for collaborative learning.</p>
+    </section>
+
+    <section id="watch">
+      <h2>Watch YouTube Together</h2>
+      <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 10-G Student Hub. Made with ❤️ for students.</p>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute("data-theme");
+      document.documentElement.setAttribute("data-theme", current === "light" ? "dark" : "light");
+    }
+
+    function enterSite() {
+      const name = document.getElementById("username").value;
+      if (name.trim() !== "") {
+        localStorage.setItem("username", name);
+        document.getElementById("login").style.display = "none";
+        alert(`Welcome ${name} to 10-G!`);
+      }
+    }
+
+    window.onload = () => {
+      const stored = localStorage.getItem("username");
+      if (stored) document.getElementById("login").style.display = "none";
+      loadTasks();
+    }
+
+    function addTask() {
+      const input = document.getElementById("taskInput");
+      const task = input.value.trim();
+      if (task) {
+        const list = document.getElementById("taskList");
+        const li = document.createElement("li");
+        li.innerHTML = `${task} <button onclick="deleteTask(this)">X</button>`;
+        list.appendChild(li);
+        saveTasks();
+        input.value = "";
+      }
+    }
+
+    function deleteTask(button) {
+      const li = button.parentElement;
+      li.remove();
+      saveTasks();
+    }
+
+    function saveTasks() {
+      const tasks = Array.from(document.querySelectorAll("#taskList li"))
+        .map(li => li.firstChild.textContent.trim());
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+
+    function loadTasks() {
+      const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+      const list = document.getElementById("taskList");
+      list.innerHTML = "";
+      tasks.forEach(task => {
+        const li = document.createElement("li");
+        li.innerHTML = `${task} <button onclick="deleteTask(this)">X</button>`;
+        list.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>
